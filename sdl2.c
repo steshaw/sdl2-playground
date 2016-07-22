@@ -59,11 +59,11 @@ int pollEventsForQuit() {
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
       case SDL_QUIT:
-        return true;
+        return 1;
         break;
       case SDL_KEYDOWN:
         if (e.key.keysym.sym == SDLK_ESCAPE) {
-          return true;
+          return 1;
         }
         break;
     }
