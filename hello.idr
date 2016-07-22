@@ -10,9 +10,18 @@ fail msg = do
   fflush stderr
   System.exit 1
 
+width : Int
+width = 640
+
+height : Int
+height = 480
+
+squareSize : Int
+squareSize = 50
+
 main : IO ()
 main = (do
-  renderer <- SDL2.init 640 480
+  renderer <- SDL2.init width height
   loop renderer
   SDL2.destroyRenderer renderer
   quit)
@@ -23,6 +32,8 @@ main = (do
         True <- SDL2.setRendererDrawColor renderer 0 0 111 255
           | fail "setRendererDrawColor"
         SDL2.rendererClear renderer
-        SDL2.filledRect renderer  100  100  50  50  255  0  0  128
+        SDL2.filledRect renderer  ((width `div` 2) - (squareSize `div` 2))
+                                  ((height `div` 2) - (squareSize `div` 2))
+                                  squareSize  squareSize  255  0  0  128
         SDL2.rendererPresent renderer
         loop renderer

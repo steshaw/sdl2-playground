@@ -1,0 +1,4 @@
+package hello
+
+executable = hello
+main = hello

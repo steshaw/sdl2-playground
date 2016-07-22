@@ -27,7 +27,7 @@ SDL_Renderer *init(int w, int h) {
   }
 
   SDL_Window *window = SDL_CreateWindow(
-    "Hello World!", 
+    "hello", 
     SDL_WINDOWPOS_CENTERED, 
     SDL_WINDOWPOS_CENTERED, 
     w, h,
@@ -82,7 +82,7 @@ int main(int argc, char* args[]) {
       exit(1);
     }
     SDL_RenderClear(renderer);
-    filledRect(renderer, 100, 100, 50, 50, 255, 0, 0, 128);
+    filledRect(renderer, 640/2 - 50/2, 480/2 - 50/2, 50, 50, 255, 0, 0, 128);
     SDL_RenderPresent(renderer); // Update screen.
   }
 quit:

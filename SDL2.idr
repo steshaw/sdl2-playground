@@ -9,6 +9,12 @@ export
 data Renderer = MkRenderer Ptr
 
 export
+data Surface = MkSurface Ptr
+
+export
+data Texture = MkTexture Ptr
+
+export
 init : Int -> Int -> IO Renderer
 init w h = do
   ptr <- foreign FFI_C "init" (Int -> Int -> IO Ptr) w h
@@ -49,6 +55,13 @@ export
 getError : IO String
 getError = foreign FFI_C "SDL_GetError" (IO String)
 
+-- XXX: Ignores last two arguments for now: srcRect and dstRect.
+export
+renderCopy : Renderer -> Texture -> IO Int
+renderCopy (MkRenderer renderer) (MkTexture texture) =
+  foreign FFI_C "SDL_RenderCopy" (Ptr -> Ptr -> Ptr -> Ptr -> IO Int)
+          renderer texture null null
+
 export
 rendererClear : Renderer -> IO Int
 rendererClear (MkRenderer renderer) =
@@ -60,9 +73,26 @@ rendererPresent (MkRenderer renderer) =
   foreign FFI_C "SDL_RenderPresent" (Ptr -> IO ()) renderer
 
 export
+loadBMP : (bmpPath : String) -> IO Surface
+loadBMP bmpPath = do
+  surface <- foreign FFI_C "SDL_LoadBMP" (String -> IO Ptr) bmpPath
+  return $ MkSurface surface
+
+export
+createTextureFromSurface : Renderer -> (bitmap : Surface) -> IO Texture
+createTextureFromSurface (MkRenderer renderer) (MkSurface bmp) = do
+  texture <- foreign FFI_C "SDL_CreateTextureFromSurface" (Ptr -> Ptr -> IO Ptr) renderer bmp
+  return $ MkTexture texture
+
+export
 destroyRenderer : Renderer -> IO ()
 destroyRenderer (MkRenderer renderer) =
   foreign FFI_C "SDL_DestroyRenderer" (Ptr -> IO ()) renderer
+
+export
+freeSurface : Surface -> IO ()
+freeSurface (MkSurface surface) =
+  foreign FFI_C "SDL_FreeSurface" (Ptr -> IO ()) surface
 
 export
 quit : IO ()

@@ -9,7 +9,7 @@ SDL_Renderer *init(int w, int h) {
   }
 
   SDL_Window *window = SDL_CreateWindow(
-    "Hello World!", 
+    "bitmap", 
     SDL_WINDOWPOS_CENTERED, 
     SDL_WINDOWPOS_CENTERED, 
     w, h,
@@ -35,8 +35,7 @@ SDL_Renderer *init(int w, int h) {
 
 int main(int argc, char* args[]) {
   SDL_Renderer *renderer = init(640, 480);
-
-  SDL_Surface *bmp = SDL_LoadBMP("hello.bmp");
+  SDL_Surface *bmp = SDL_LoadBMP("../saturn_1_640.bmp");
   if (bmp == NULL) {
       SDL_DestroyRenderer(renderer);
       // SDL_DestroyWindow(window);

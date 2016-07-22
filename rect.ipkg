@@ -1,8 +1,0 @@
-package rect
-
-modules = Config
-
-executable = rect
-main = rect
-
-libs = SDL2

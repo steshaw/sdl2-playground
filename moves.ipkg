@@ -1,0 +1,4 @@
+package moves
+
+executable = moves
+main = moves

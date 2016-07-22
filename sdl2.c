@@ -70,26 +70,3 @@ int pollEventsForQuit() {
   }
   return 0;
 }
-
-/*
-int main(int argc, char* args[]) {
-  SDL_Renderer *renderer = init(640, 480);
-
-  for (;;) {
-    if (pollEventsForQuit()) goto quit;
-    int rc1 = SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    if (rc1 != 0) {
-      fprintf(stderr, "SDL_SetRenderDrawColor failed: %s\n", SDL_GetError());
-      exit(1);
-    }
-    SDL_RenderClear(renderer);
-    filledRect(renderer, 100, 100, 50, 50, 255, 0, 0, 128);
-    SDL_RenderPresent(renderer); // Update screen.
-  }
-quit:
-  SDL_DestroyRenderer(renderer);
-  SDL_Quit();
-
-  return 0;
-}
-*/
