@@ -31,9 +31,9 @@ main = (do
         False <- SDL2.pollEventsForQuit | pure ()
         True <- SDL2.setRendererDrawColor renderer 0 0 111 255
           | fail "setRendererDrawColor"
-        SDL2.rendererClear renderer
+        SDL2.renderClear renderer
         SDL2.filledRect renderer  ((width `div` 2) - (squareSize `div` 2))
                                   ((height `div` 2) - (squareSize `div` 2))
                                   squareSize  squareSize  255  0  0  128
-        SDL2.rendererPresent renderer
+        SDL2.renderPresent renderer
         loop renderer

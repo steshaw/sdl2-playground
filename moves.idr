@@ -33,9 +33,9 @@ main = (do
 
         True <- SDL2.setRendererDrawColor renderer 0 0 111 255
           | fail "setRendererDrawColor"
-        SDL2.rendererClear renderer
+        SDL2.renderClear renderer
         SDL2.filledRect renderer x y squareSize squareSize 255  0  0  128
-        SDL2.rendererPresent renderer
+        SDL2.renderPresent renderer
 
         pollEvent <- SDL2.pollEvent
         pending <- SDL2.pollEvent_pending pollEvent

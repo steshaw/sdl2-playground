@@ -94,13 +94,13 @@ renderCopy (MkRenderer renderer) (MkTexture texture) =
           renderer texture null null
 
 export
-rendererClear : Renderer -> IO Int
-rendererClear (MkRenderer renderer) =
+renderClear : Renderer -> IO Int
+renderClear (MkRenderer renderer) =
   foreign FFI_C "SDL_RenderClear" (Ptr -> IO Int) renderer
 
 export
-rendererPresent : Renderer -> IO ()
-rendererPresent (MkRenderer renderer) =
+renderPresent : Renderer -> IO ()
+renderPresent (MkRenderer renderer) =
   foreign FFI_C "SDL_RenderPresent" (Ptr -> IO ()) renderer
 
 export

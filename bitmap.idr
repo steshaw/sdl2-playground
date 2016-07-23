@@ -29,8 +29,8 @@ main = (do
         False <- SDL2.pollEventsForQuit | pure ()
         True <- SDL2.setRendererDrawColor renderer 0 0 0 0
           | abort "setRendererDrawColor"
-        SDL2.rendererClear renderer
+        SDL2.renderClear renderer
         rc <- SDL2.renderCopy renderer texture -- draw texture
         when (rc /= 0) $ abort "renderCopy"
-        SDL2.rendererPresent renderer -- update screen
+        SDL2.renderPresent renderer -- update screen
         loop renderer texture
