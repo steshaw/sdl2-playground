@@ -1,9 +1,14 @@
 CC = gcc
-CFLAGS = -Wall `pkg-config --cflags SDL2_gfx`
+CFLAGS = -Wall `idris --include` `pkg-config --cflags SDL2_gfx`
 LDFLAGS = `pkg-config --libs SDL2_gfx`
 
 .PHONY: all
-all: sdl2.o bitmap hello moves
+all: generate_constants Constants.idr sdl2.o bitmap hello moves
+
+Constants.idr: generate_constants
+	./generate_constants >Constants.idr
+
+sdl2.o: sdl2.h sdl2.c
 
 Config.idr: Makefile
 	@echo "%flag C \"`pkg-config --libs sdl2`\"" >Config.idr

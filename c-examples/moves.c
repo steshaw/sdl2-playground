@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdbool.h>
-#include <idris_rts.h>
 #include <SDL2/SDL.h>
 
 void filledRect(void *r_in,
@@ -28,7 +27,7 @@ SDL_Renderer *init(int w, int h) {
   }
 
   SDL_Window *window = SDL_CreateWindow(
-    "Hello World!", 
+    "moves", 
     SDL_WINDOWPOS_CENTERED, 
     SDL_WINDOWPOS_CENTERED, 
     w, h,
@@ -56,42 +55,57 @@ SDL_Renderer *init(int w, int h) {
 }
 
 int pollEventsForQuit() {
-  SDL_Event e;
-  while (SDL_PollEvent(&e)) {
-    switch (e.type) {
-      case SDL_QUIT:
-        return 1;
-        break;
-      case SDL_KEYDOWN:
-        if (e.key.keysym.sym == SDLK_ESCAPE) {
-          return 1;
-        }
-        break;
-    }
-  }
   return 0;
 }
 
-// Capture all the results of SDL_PollEvent.
-typedef struct {
-  int pending; // Either 0 or 1 according to SDL2 documentation.
-  SDL_Event event;
-} PollEvent;
+int main(int argc, char* args[]) {
+  SDL_Renderer *renderer = init(640, 480);
 
-PollEvent *idris_sdl2_pollEvent() {
-  PollEvent *pollEvent = idris_alloc(sizeof(PollEvent));
-  pollEvent->pending = SDL_PollEvent(&pollEvent->event);
-  return pollEvent;
-}
+  int x = 640/2 - 50/2;
+  int y = 480/2 - 50/2;
+  int dx = 0;
+  int dy = 0;
 
-int idris_sdl2_pollEvent_pending(PollEvent *pollEvent) {
-  return pollEvent->pending;
-}
+  for (;;) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+      switch (e.type) {
+        case SDL_QUIT:
+          goto quit;
+        case SDL_KEYDOWN:
+          switch (e.key.keysym.sym) {
+            case SDLK_ESCAPE: goto quit;
+            case SDLK_UP: dy = -1; break;
+            case SDLK_RIGHT: dx = 1; break;
+            case SDLK_DOWN: dy = 1; break;
+            case SDLK_LEFT: dx = -1; break;
+          }
+          break;
+        case SDL_KEYUP:
+          switch (e.key.keysym.sym) {
+            case SDLK_UP: dy = 0; break;
+            case SDLK_RIGHT: dx = 0; break;
+            case SDLK_DOWN: dy = 0; break;
+            case SDLK_LEFT: dx = 0; break;
+          }
+          break;
+      }
+    }
 
-int idris_sdl2_pollEvent_event_type(PollEvent *pollEvent) {
-  return pollEvent->event.type;
-}
+    int rc1 = SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    if (rc1 != 0) {
+      fprintf(stderr, "SDL_SetRenderDrawColor failed: %s\n", SDL_GetError());
+      exit(1);
+    }
+    SDL_RenderClear(renderer);
+    x += dx;
+    y += dy;
+    filledRect(renderer, x, y, 50, 50, 255, 0, 0, 128);
+    SDL_RenderPresent(renderer); // Update screen.
+  }
+quit:
+  SDL_DestroyRenderer(renderer);
+  SDL_Quit();
 
-int idris_sdl2_pollEvent_event_key_keysym_sym(PollEvent *pollEvent) {
-  return pollEvent->event.key.keysym.sym;
+  return 0;
 }

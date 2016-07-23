@@ -1,6 +1,7 @@
 module SDL2
 
 import Config
+import public Constants
 
 %include C "sdl2.h"
 %link    C "sdl2.o"
@@ -13,6 +14,9 @@ data Surface = MkSurface Ptr
 
 export
 data Texture = MkTexture Ptr
+
+export
+data PollEvent = MkPollEvent Ptr
 
 export
 init : Int -> Int -> IO Renderer
@@ -35,10 +39,37 @@ filledRect (MkRenderer renderer) x y w h r g b a = do
      IO ())
     renderer x y w h r g b a
 
+--
+-- PollEvent
+--
+
+export
+pollEvent : IO PollEvent
+pollEvent = do
+  pollEvent <- foreign FFI_C "idris_sdl2_pollEvent" (IO Ptr)
+  return $ MkPollEvent pollEvent
+
+export
+pollEvent_pending : PollEvent -> IO Int
+pollEvent_pending (MkPollEvent pollEvent) =
+  foreign FFI_C "idris_sdl2_pollEvent_pending" (Ptr -> IO Int) pollEvent
+
+export
+pollEvent_event_type : PollEvent -> IO Bits32
+pollEvent_event_type (MkPollEvent pollEvent) =
+  foreign FFI_C "idris_sdl2_pollEvent_event_type" (Ptr -> IO Bits32) pollEvent
+
+export
+pollEvent_event_key_keysym_sym : PollEvent -> IO Bits32
+pollEvent_event_key_keysym_sym (MkPollEvent pollEvent) =
+  foreign FFI_C "idris_sdl2_pollEvent_event_key_keysym_sym" (Ptr -> IO Bits32) pollEvent
+
+--
+
 export
 pollEventsForQuit : IO Bool
 pollEventsForQuit = do
-  quit <- foreign FFI_C "pollEventsForQuit" (IO (Int))
+  quit <- foreign FFI_C "pollEventsForQuit" (IO Int)
   return $ quit == 1
 
 export

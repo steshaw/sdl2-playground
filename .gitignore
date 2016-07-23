@@ -1,5 +1,7 @@
 /bitmap
 /hello
 /moves
+/generate_constants
+/Constants.idr
 *.ibc
 rect

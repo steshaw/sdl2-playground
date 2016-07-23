@@ -12,4 +12,16 @@ SDL_Renderer *init(int w, int h);
 
 int pollEventsForQuit();
 
+//
+// SDL_PollEvent
+//
+
+typedef struct PollEvent PollEvent;
+
+PollEvent *idris_sdl2_pollEvent();
+
+int idris_sdl2_pollEvent_pending(PollEvent *pollEvent);
+int idris_sdl2_pollEvent_event_type(PollEvent *pollEvent);
+int idris_sdl2_pollEvent_event_key_keysym_sym(PollEvent *pollEvent);
+
 #endif
